@@ -7,26 +7,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.ella.assistant.R
+import android.ella.assistant.adapter.ListAdapter
+import android.ella.assistant.databinding.FragmentListBinding
+import android.ella.assistant.viewmodel.ListViewModel
+import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.GridLayoutManager
 
 class ListFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = ListFragment()
-    }
-
-    private lateinit var viewModel: ListViewModel
+    private lateinit var mBinding: FragmentListBinding
+    private val viewModel: ListViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_list, container, false)
+        mBinding = FragmentListBinding.inflate(inflater,container,false)
+
+
+        mBinding.recycleList.let {
+        it.adapter = ListAdapter(requireContext(),viewModel.getAssistants())
+        it.layoutManager = GridLayoutManager(requireContext(),3)
+        }
+
+
+        return mBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ListViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
 }

@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "272572118594",
+    "firebase_url": "https://crud-a99fe-default-rtdb.firebaseio.com",
+    "project_id": "crud-a99fe",
+    "storage_bucket": "crud-a99fe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:272572118594:android:e9dceb57310903d83cdfdb",
+        "android_client_info": {
+          "package_name": "android.ella.assistant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "272572118594-ufaqp07c843d962dq5bpg53m2ullnffk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKxnVntPbwGwCWY73009QLPhe84il4BEE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "272572118594-ufaqp07c843d962dq5bpg53m2ullnffk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:272572118594:android:d9ea3ff209ae3b853cdfdb",
+        "android_client_info": {
+          "package_name": "android.ruhala.laba"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "272572118594-ufaqp07c843d962dq5bpg53m2ullnffk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKxnVntPbwGwCWY73009QLPhe84il4BEE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "272572118594-ufaqp07c843d962dq5bpg53m2ullnffk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
