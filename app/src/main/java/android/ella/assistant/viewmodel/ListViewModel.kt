@@ -1,19 +1,121 @@
 package android.ella.assistant.viewmodel
 
+import android.content.ContentValues
+import android.ella.assistant.adapter.ListAdapter
 import android.ella.assistant.entity.Assistant
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.auth.api.signin.internal.Storage
+import com.google.firebase.database.*
+import com.google.firebase.database.ktx.getValue
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
+import java.io.ByteArrayOutputStream
+import java.util.*
+import kotlin.collections.ArrayList
+
 
 class ListViewModel : ViewModel() {
+
+    companion object FirebaseDAO {
+        private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+        private val dbRef: DatabaseReference = database.getReference("db_assistant")
+        private val listRef: DatabaseReference = dbRef.child("assistants")
+        private val storage = FirebaseStorage.getInstance()
+        private val stRef: StorageReference = storage.getReference("st_assistant")
+        private val imgRef = stRef.child("images")
+        private val vdRef = stRef.child("videos")
+
+
+        fun uploadImage(bitmap: Bitmap):String{
+            val baos = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 0, baos)
+            val data: ByteArray = baos.toByteArray()
+
+            val imageName = UUID.randomUUID().toString()
+            val tempRef: StorageReference = imgRef.child(imageName)
+            val uploadTask: UploadTask = tempRef.putBytes(data)
+            uploadTask.addOnFailureListener {}
+                .addOnSuccessListener { taskSnapshot -> // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                    val downloadUrl: Uri? = taskSnapshot.uploadSessionUri
+                }
+
+            return imageName
+        }
+        fun downloadImage(imageName:String?){
+            if (imageName == null) return
+            val tempRef = imgRef.child(imageName)
+            tempRef.getBytes(1024*1024).addOnSuccessListener { byteArray ->
+                BitmapFactory.decodeByteArray(byteArray,0,byteArray.size).also {
+
+                }
+            }
+        }
+
+    }
+
+
+
+    private fun uploadItems(){
+
+        listRef.setValue(assistants.value)
+    }
+
+
+
+    private val listListener = object : ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            val list = dataSnapshot.getValue<ArrayList<Assistant>>()
+            if (list != null) {
+                assistants.value = list
+                adapter.value!!.notifyDataSetChanged()
+            }else{
+                assistants.value = ArrayList<Assistant>()
+            }
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            Log.w(ContentValues.TAG, "loadPost:onCancelled", error.toException())
+        }
+
+    }.also {
+        listRef.addValueEventListener(it)
+    }
+
+
     private val assistants: MutableLiveData<ArrayList<Assistant>> by lazy {
         MutableLiveData<ArrayList<Assistant>>().also {
             it.value = fillList()
         }
     }
 
+    private val adapter: MutableLiveData<ListAdapter> = MutableLiveData()
 
-    fun getAssistants(): ArrayList<Assistant>?{
-        return assistants.value
+    fun getAssistants(): ArrayList<Assistant> {
+        return assistants.value!!
+    }
+
+    fun getAssistantsLiveData():LiveData<ArrayList<Assistant>>{
+        return assistants
+    }
+
+    fun addAssistant(a: Assistant) {
+        assistants.value!!.add(a)
+        uploadItems()
+    }
+
+    fun setAdapter(a: ListAdapter) {
+        adapter.value = a
+    }
+
+    fun getAdapter(): ListAdapter {
+        return adapter.value!!
     }
 
     private fun fillList(): ArrayList<Assistant> {

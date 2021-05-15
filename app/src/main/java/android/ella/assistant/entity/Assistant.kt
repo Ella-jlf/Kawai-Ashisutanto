@@ -8,7 +8,7 @@ import com.google.firebase.database.IgnoreExtraProperties
 @IgnoreExtraProperties
 data class Assistant(
     var name: String? = null, var description: String? = null,
-    @get:Exclude var ImageUrl: Uri? = null,
-    @get:Exclude var VideoUrl: Uri? = null,
-    @get:Exclude var ImageBitmap: Bitmap? = null
+    var imageName: String? = null,
+    @get:Exclude var videoUrl: Uri? = null,
+    @get:Exclude var imageBitmap: Bitmap? = null
 )

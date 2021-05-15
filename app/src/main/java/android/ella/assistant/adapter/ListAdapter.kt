@@ -22,8 +22,8 @@ class ListAdapter(context: Context, list: ArrayList<Assistant>?) : RecyclerView.
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         if (!mList.isNullOrEmpty()){
             holder.nameView.text = mList[position].name
-            if (mList[position].ImageBitmap != null){
-                holder.imageView.setImageBitmap(mList[position].ImageBitmap)
+            if (mList[position].imageBitmap != null){
+                holder.imageView.setImageBitmap(mList[position].imageBitmap)
             }
             holder.itemView.setOnClickListener {
                 Toast.makeText(mContext,"Item Clicked $position",Toast.LENGTH_SHORT).show()
