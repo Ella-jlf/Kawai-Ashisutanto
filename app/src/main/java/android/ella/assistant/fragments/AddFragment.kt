@@ -55,7 +55,6 @@ class AddFragment : Fragment() {
                     imageName = ListViewModel.uploadImage(mBitmap!!)
                 )
                 viewModel.addAssistant(nAssist)
-                viewModel.getAdapter().notifyItemInserted(viewModel.getAssistants().size-1)
                 back()
             }
         }

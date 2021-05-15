@@ -71,13 +71,14 @@ class ListViewModel : ViewModel() {
 
     private val listListener = object : ValueEventListener {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
-            val list = dataSnapshot.getValue<ArrayList<Assistant>>()
-            if (list != null) {
-                assistants.value = list
-                adapter.value!!.notifyDataSetChanged()
+            val tList = dataSnapshot.getValue<ArrayList<Assistant>>()
+            if (tList != null) {
+                list.clear()
+                list.addAll(tList)
             }else{
-                assistants.value = ArrayList<Assistant>()
+                list.clear()
             }
+            assistants.value = list
         }
 
         override fun onCancelled(error: DatabaseError) {
@@ -94,8 +95,8 @@ class ListViewModel : ViewModel() {
             it.value = fillList()
         }
     }
+    val list  = ArrayList<Assistant>()
 
-    private val adapter: MutableLiveData<ListAdapter> = MutableLiveData()
 
     fun getAssistants(): ArrayList<Assistant> {
         return assistants.value!!
@@ -106,20 +107,13 @@ class ListViewModel : ViewModel() {
     }
 
     fun addAssistant(a: Assistant) {
-        assistants.value!!.add(a)
+        list.add(a)
+        assistants.value = list
         uploadItems()
     }
 
-    fun setAdapter(a: ListAdapter) {
-        adapter.value = a
-    }
-
-    fun getAdapter(): ListAdapter {
-        return adapter.value!!
-    }
 
     private fun fillList(): ArrayList<Assistant> {
-        val list: ArrayList<Assistant> = ArrayList()
         list.add(Assistant(name = "Chika", description = "Wp"))
         list.add(Assistant(name = "Aqua", description = "Useless"))
         list.add(Assistant(name = "Megumin", description = "loli"))

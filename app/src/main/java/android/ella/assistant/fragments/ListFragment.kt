@@ -18,7 +18,7 @@ class ListFragment : Fragment() {
 
     private lateinit var mBinding: FragmentListBinding
     private val viewModel: ListViewModel by activityViewModels()
-
+    private lateinit var adapter :ListAdapter
 
 
     override fun onCreateView(
@@ -29,12 +29,12 @@ class ListFragment : Fragment() {
 
 
         viewModel.getAssistantsLiveData().observe(viewLifecycleOwner,{
-            viewModel.getAdapter().notifyDataSetChanged()
+            adapter.notifyDataSetChanged()
         })
 
+        adapter = ListAdapter(requireContext(),viewModel.list)
         mBinding.recycleList.let {
-            viewModel.setAdapter(ListAdapter(requireContext(),viewModel.getAssistants()))
-        it.adapter = viewModel.getAdapter()
+        it.adapter = adapter
         it.layoutManager = GridLayoutManager(requireContext(),3)
         }
 
