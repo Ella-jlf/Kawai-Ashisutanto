@@ -114,9 +114,6 @@ class ListViewModel : ViewModel() {
 
 
     private fun fillList(): ArrayList<Assistant> {
-        list.add(Assistant(name = "Chika", description = "Wp"))
-        list.add(Assistant(name = "Aqua", description = "Useless"))
-        list.add(Assistant(name = "Megumin", description = "loli"))
         return list
     }
 
