@@ -10,5 +10,7 @@ data class Assistant(
     var name: String? = null, var description: String? = null,
     var imageName: String? = null,
     @get:Exclude var videoUrl: Uri? = null,
-    @get:Exclude var imageBitmap: Bitmap? = null
+    @get:Exclude var imageBitmap: Bitmap? = null,
+    var latitude : Double? = null,
+    var longitude: Double? = null
 )
