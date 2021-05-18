@@ -6,4 +6,5 @@
     <string name="map">Map</string>
     <string name="name">Name</string>
     <string name="add">Add</string>
+    <string name="edit">Edit</string>
 </resources>

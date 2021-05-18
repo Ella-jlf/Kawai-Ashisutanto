@@ -134,6 +134,11 @@ class ListViewModel : ViewModel() {
         uploadItems()
     }
 
+    fun editAssistant(a:Assistant){
+        val pos = assistantPos.value!!
+        list[pos] = a
+        uploadItems()
+    }
 
     private fun fillList(): ArrayList<Assistant> {
         return list

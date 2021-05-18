@@ -9,6 +9,8 @@ import android.ella.assistant.R
 import android.ella.assistant.databinding.FragmentRepresentBinding
 import android.ella.assistant.viewmodel.ListViewModel
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 
 class RepresentFragment : Fragment(), View.OnClickListener {
 
@@ -60,7 +62,11 @@ class RepresentFragment : Fragment(), View.OnClickListener {
                 back()
             }
             mBinding.representBtnEdit ->{
-
+                parentFragmentManager.commit {
+                    replace<EditFragment>(R.id.fragment_container)
+                    setReorderingAllowed(true)
+                    addToBackStack(null)
+                }
             }
             mBinding.representBtnRemove -> {
                 viewModel.removeAssistant()
