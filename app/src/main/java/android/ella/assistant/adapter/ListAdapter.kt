@@ -3,12 +3,14 @@ package android.ella.assistant.adapter
 import android.content.Context
 import android.ella.assistant.R
 import android.ella.assistant.entity.Assistant
+import android.ella.assistant.fragments.ListFragment
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
 class ListAdapter(context: Context, list: ArrayList<Assistant>?) : RecyclerView.Adapter<ListViewHolder>() {
+
 
     private val mContext = context
     private val mList  = list
@@ -24,9 +26,6 @@ class ListAdapter(context: Context, list: ArrayList<Assistant>?) : RecyclerView.
             holder.nameView.text = mList[position].name
             if (mList[position].imageBitmap != null){
                 holder.imageView.setImageBitmap(mList[position].imageBitmap)
-            }
-            holder.itemView.setOnClickListener {
-                Toast.makeText(mContext,"Item Clicked $position",Toast.LENGTH_SHORT).show()
             }
         }
 

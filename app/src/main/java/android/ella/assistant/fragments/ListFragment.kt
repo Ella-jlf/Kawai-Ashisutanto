@@ -1,18 +1,20 @@
 package android.ella.assistant.fragments
 
+import android.ella.assistant.R
+import android.ella.assistant.adapter.ListAdapter
+import android.ella.assistant.adapter.RecyclerItemClickListener
+import android.ella.assistant.databinding.FragmentListBinding
+import android.ella.assistant.viewmodel.ListViewModel
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.ella.assistant.R
-import android.ella.assistant.adapter.ListAdapter
-import android.ella.assistant.databinding.FragmentListBinding
-import android.ella.assistant.viewmodel.ListViewModel
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import androidx.recyclerview.widget.GridLayoutManager
+
 
 class ListFragment : Fragment() {
 
@@ -25,18 +27,39 @@ class ListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mBinding = FragmentListBinding.inflate(inflater,container,false)
+        mBinding = FragmentListBinding.inflate(inflater, container, false)
 
 
-        viewModel.getAssistantsLiveData().observe(viewLifecycleOwner,{
+        viewModel.getAssistantsLiveData().observe(viewLifecycleOwner, {
             adapter.notifyDataSetChanged()
         })
 
-        adapter = ListAdapter(requireContext(),viewModel.list)
+        adapter = ListAdapter(requireContext(), viewModel.list)
         mBinding.recycleList.let {
         it.adapter = adapter
-        it.layoutManager = GridLayoutManager(requireContext(),3)
+        it.layoutManager = GridLayoutManager(requireContext(), 3)
         }
+
+        mBinding.recycleList.addOnItemTouchListener(
+            RecyclerItemClickListener(
+                context,
+                mBinding.recycleList,
+                object : RecyclerItemClickListener.OnItemClickListener {
+                    override fun onItemClick(view: View?, position: Int) {
+                        viewModel.assistantPos.value = position
+                        parentFragmentManager.commit{
+                            replace<RepresentFragment>(R.id.fragment_container)
+                            setReorderingAllowed(true)
+                            addToBackStack(null)
+                        }
+                    }
+
+                    override fun onLongItemClick(view: View?, position: Int) {
+                        // do whatever
+                    }
+                })
+        )
+
 
 
         mBinding.listBtnAdd.setOnClickListener {
@@ -55,6 +78,9 @@ class ListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
     }
+
+
+
 
 }
 

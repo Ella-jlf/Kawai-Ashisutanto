@@ -48,23 +48,30 @@ class ListViewModel : ViewModel() {
 
             return imageName
         }
-        fun downloadImage(imageName:String?){
-            if (imageName == null) return
-            val tempRef = imgRef.child(imageName)
-            tempRef.getBytes(1024*1024).addOnSuccessListener { byteArray ->
-                BitmapFactory.decodeByteArray(byteArray,0,byteArray.size).also {
 
-                }
-            }
-        }
 
     }
+
+    private fun downloadImage(position:Int?){
+        if (position != null && position< list.size && position >=0 && list[position].imageName != null){
+        val tempRef = imgRef.child(list[position].imageName!!)
+        tempRef.getBytes(1024*1024).addOnSuccessListener { byteArray ->
+            BitmapFactory.decodeByteArray(byteArray,0,byteArray.size).also {
+                list[position].imageBitmap = it
+                assistants.value = list
+            }
+            }
+        }
+    }
+
+
+
 
 
 
     private fun uploadItems(){
 
-        listRef.setValue(assistants.value)
+        listRef.setValue(list)
     }
 
 
@@ -75,6 +82,9 @@ class ListViewModel : ViewModel() {
             if (tList != null) {
                 list.clear()
                 list.addAll(tList)
+                for (i in 1..list.size){
+                    downloadImage(i-1)
+                }
             }else{
                 list.clear()
             }
@@ -95,6 +105,14 @@ class ListViewModel : ViewModel() {
             it.value = fillList()
         }
     }
+
+    val assistantPos :MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>().also {
+            it.value = null
+        }
+    }
+
+
     val list  = ArrayList<Assistant>()
 
 
@@ -108,7 +126,11 @@ class ListViewModel : ViewModel() {
 
     fun addAssistant(a: Assistant) {
         list.add(a)
-        assistants.value = list
+        uploadItems()
+    }
+
+    fun removeAssistant(){
+        list.removeAt(assistantPos.value!!)
         uploadItems()
     }
 

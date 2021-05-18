@@ -12,4 +12,6 @@
     <dimen name="edit_text_width">300dp</dimen>
     <dimen name="edit_text_height">200dp</dimen>
     <dimen name="margin_big">64dp</dimen>
+    <dimen name="text_view_width">250dp</dimen>
+    <dimen name="text_view_height">50dp</dimen>
 </resources>
