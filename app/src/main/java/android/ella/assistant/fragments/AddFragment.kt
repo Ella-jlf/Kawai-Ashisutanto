@@ -51,8 +51,7 @@ class AddFragment : Fragment() {
                 val nAssist = Assistant(
                     name = mBinding.addName.text.toString(),
                     description = mBinding.addDescription.text.toString(),
-                    imageBitmap = mBitmap,
-                    imageName = ListViewModel.uploadImage(mBitmap!!)
+                    imageBitmap = mBitmap
                 )
                 viewModel.addAssistant(nAssist)
                 back()

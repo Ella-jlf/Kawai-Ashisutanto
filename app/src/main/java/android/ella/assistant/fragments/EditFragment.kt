@@ -23,11 +23,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.google.firebase.storage.internal.Sleeper
+import kotlinx.coroutines.*
 
 class EditFragment : Fragment(), View.OnClickListener {
 
     private lateinit var mBinding: FragmentEditBinding
-    private var mBitmap : Bitmap? = null
+    private var mBitmap: Bitmap? = null
 
     private val viewModel: ListViewModel by activityViewModels()
 
@@ -40,7 +41,7 @@ class EditFragment : Fragment(), View.OnClickListener {
 
 
         fill()
-        mBinding.editBtnEdit.setOnClickListener (this)
+        mBinding.editBtnEdit.setOnClickListener(this)
         mBinding.editBtnBack.setOnClickListener(this)
         mBinding.editImage.setOnClickListener(this)
 
@@ -48,7 +49,6 @@ class EditFragment : Fragment(), View.OnClickListener {
 
         return mBinding.root
     }
-
 
 
     private fun checkPermissions(permissionType: Int): Boolean {
@@ -87,7 +87,7 @@ class EditFragment : Fragment(), View.OnClickListener {
 
             when (requestCode) {
                 RequestCode.IMAGE -> {
-                    val bitmap = if (Build.VERSION.SDK_INT < 28) {
+                    @Suppress("DEPRECATION") val bitmap = if (Build.VERSION.SDK_INT < 28) {
                         MediaStore.Images.Media.getBitmap(
                             requireContext().contentResolver,
                             data.data!!
@@ -119,54 +119,60 @@ class EditFragment : Fragment(), View.OnClickListener {
 
     }
 
-    private fun back(){
+    private fun back() {
         parentFragmentManager.popBackStack()
     }
 
-    private fun fill(){
-        val pos =viewModel.assistantPos.value
-        if ( pos != null){
+    private fun fill() {
+        val pos = viewModel.assistantPos.value
+        if (pos != null) {
             mBinding.editImage.setImageBitmap(viewModel.getAssistants()[pos].imageBitmap)
             mBinding.editName.setText(viewModel.getAssistants()[pos].name)
-            mBinding.editDescription.setText( viewModel.getAssistants()[pos].description)
+            mBinding.editDescription.setText(viewModel.getAssistants()[pos].description)
             mBitmap = viewModel.getAssistants()[pos].imageBitmap
         }
 
     }
 
     override fun onClick(v: View?) {
-        when (v){
-            mBinding.editBtnBack ->{
+        when (v) {
+            mBinding.editBtnBack -> {
                 back()
             }
-            mBinding.editImage ->{
-                while (!checkPermissions(RequestCode.READ_EXTERNAL_STORAGE)){
+            mBinding.editImage -> {
+                while (!checkPermissions(RequestCode.READ_EXTERNAL_STORAGE)) {
 
                 }
                 val intent = Intent().apply {
                     type = "image/*"
                     action = Intent.ACTION_GET_CONTENT
                 }
-                startActivityForResult(intent,RequestCode.IMAGE)
+                startActivityForResult(intent, RequestCode.IMAGE)
             }
-            mBinding.editBtnEdit ->{
+            mBinding.editBtnEdit -> {
                 if (mBinding.editName.text.isEmpty() || mBinding.editDescription.text.isEmpty() || mBitmap == null) {
                     Toast.makeText(context, "Fill fields", Toast.LENGTH_SHORT).show()
                 } else {
-                    val nAssist = Assistant(
-                        name = mBinding.editName.text.toString(),
-                        description = mBinding.editDescription.text.toString(),
-                        imageBitmap = mBitmap,
-                        imageName = ListViewModel.uploadImage(mBitmap!!)
-                    )
 
-                    viewModel.editAssistant(nAssist)
+                    val nAssistant =
+                        Assistant(
+                            name = mBinding.editName.text.toString(),
+                            description = mBinding.editDescription.text.toString(),
+                            imageBitmap = mBitmap
+                        )
+
+
+                    viewModel.editAssistant(nAssistant)
+
+
                     back()
                 }
+
+
             }
-
         }
+
     }
-
-
 }
+
+
